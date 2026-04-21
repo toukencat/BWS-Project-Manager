@@ -29,9 +29,33 @@
 		3C18757C2F93719400377703 /* BWS Project PlannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BWS Project PlannerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "BWS Project Planner" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				HomeView.swift,
+			);
+			target = 3C1875622F93719200377703 /* BWS Project Planner */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 3C1875612F93719200377703 /* Resources */;
+			membershipExceptions = (
+				HomeView.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3C1875652F93719200377703 /* BWS Project Planner */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "BWS Project Planner" target */,
+				3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */,
+			);
 			path = "BWS Project Planner";
 			sourceTree = "<group>";
 		};
@@ -195,6 +219,9 @@
 			);
 			mainGroup = 3C18755A2F93719200377703;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3C18758F2F93723200377703 /* XCRemoteSwiftPackageReference "swift-nio" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3C1875642F93719200377703 /* Products */;
 			projectDirPath = "";
@@ -570,6 +597,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3C18758F2F93723200377703 /* XCRemoteSwiftPackageReference "swift-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-nio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.98.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 3C18755B2F93719200377703 /* Project object */;
 }

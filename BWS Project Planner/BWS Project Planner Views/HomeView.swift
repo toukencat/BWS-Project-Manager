@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
+    @Query var projects: [Project]
+    
     var body: some View {
          NavigationView {
             ZStack {

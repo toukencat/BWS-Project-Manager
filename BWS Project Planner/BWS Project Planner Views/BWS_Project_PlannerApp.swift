@@ -27,6 +27,10 @@ struct BWS_Project_PlannerApp: App {
         WindowGroup {
             ContentView()
         }
+        WindowGroup {
+            NewProjectView()
+        }
+        .modelContainer(for: Project.self)
         .modelContainer(sharedModelContainer)
     }
 }

@@ -13,14 +13,18 @@ class Task: Identifiable {
     var title: String
     var type: String
     var descriptionText: String
-    var number: Int?          // optional
-    @Relationship var project: Project?
+    var isCompleted: Bool
+    var expectedValue: Int?
+    var currentValue: Int?
+    @Relationship(inverse: \Project.tasks) var project: Project?
     
-    init(title: String, type: String = "Completion", descriptionText: String = "", number: Int? = nil, project: Project? = nil) {
+    init(title: String, type: String = "Completion", descriptionText: String = "", isCompleted: Bool, expectedValue: Int? = nil, currentValue: Int?, project: Project? = nil) {
         self.title = title
         self.type = type
         self.descriptionText = descriptionText
-        self.number = number
+        self.isCompleted = isCompleted
+        self.expectedValue = expectedValue
+        self.currentValue = currentValue
         self.project = project
     }
 }

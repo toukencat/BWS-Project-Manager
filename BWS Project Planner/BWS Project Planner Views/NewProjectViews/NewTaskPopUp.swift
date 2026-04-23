@@ -11,18 +11,18 @@ import SwiftData
 struct NewTaskModalView: View {
     
     @Environment(\.dismiss) var dismiss
+    
     @Binding var tasks: [Task]
+    @Binding var isModalPresented: Bool
     
     // State Variables
-    @Binding var isModalPresented: Bool // Binding to control the visibility of the modal
     @State private var taskTitle: String = ""
     @State private var selectedTaskType: String = "Completion"
     @State private var selectedNumber: Int = 0
+    @State private var selectedTaskCompleted: Bool = false
     @State private var taskDescription: String = "Enter description here..."
     
     let taskTypes = ["Completion", "Numerical"]
-    var number: Int?
-    
     
     var body: some View {
         // Background
@@ -30,7 +30,7 @@ struct NewTaskModalView: View {
             // Task Title
             TextField("Task Title", text: $taskTitle)
                 .padding()
-                .background(Color.white.opacity(0.2))
+                .background(Color.white.opacity(0.5))
                 .cornerRadius(10)
                 .foregroundColor(.white)
                 .font(.title3)
@@ -62,10 +62,29 @@ struct NewTaskModalView: View {
                 .cornerRadius(10)
                 .foregroundColor(.white)
                 .padding(.horizontal)
+            } else if selectedTaskType == "Completion" {
+                Button(action: {
+                    selectedTaskCompleted.toggle()
+                }) {
+                    HStack {
+                        Text("Task Completed")
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Image(systemName: selectedTaskCompleted ? "checkmark.circle.fill" : "circle")
+                            .foregroundColor(selectedTaskCompleted ? .green : .white)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(10)
+                }
+                .padding(.horizontal)
             }
             
             // Task Description
-            TextField("Enter description here...", text: $taskDescription)
+            TextEditor(text: $taskDescription)
+                .scrollContentBackground(.hidden)
                 .padding()
                 .background(Color.white.opacity(0.2))
                 .cornerRadius(10)
@@ -82,10 +101,15 @@ struct NewTaskModalView: View {
                         title: taskTitle,
                         type: selectedTaskType,
                         descriptionText: taskDescription,
-                        number: selectedTaskType == "Numerical" ? selectedNumber : nil
+                        isCompleted: selectedTaskCompleted,
+                        expectedValue: selectedTaskType == "Numerical" ? selectedNumber : nil,
+                        currentValue: 0
                     )
                     
                     tasks.append(newTask)
+                    selectedTaskCompleted = false
+                    taskTitle = ""
+                    taskDescription = ""
                     isModalPresented = false
                 }) {
                     Text("Save Task")

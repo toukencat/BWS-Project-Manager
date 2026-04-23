@@ -18,11 +18,11 @@ struct NewProjectView: View {
     @State private var dueDate: Date = Date()
     @State private var selectedProjectType: String = "Client Event"
     @State private var selectedPriority: String = "High"
+    @State private var selectedAssignee: String = "All"
     @State private var isNewTaskModalPresented: Bool = false
-    @State private var isDeleteTaskViewPresented = false
+    @State private var isTaskViewPresented = false
     @State private var showExitConfirmation = false
     @State private var tasks: [Task] = []
-    @State private var selectedAssignee: String = "All"
 
     // Date Selection
     @State private var selectedMonthIndex: Int = Calendar.current.component(.month, from: Date()) - 1
@@ -44,7 +44,8 @@ struct NewProjectView: View {
             title: projectTitle,
             dueDate: dueDate,
             projectType: selectedProjectType,
-            priority: selectedPriority
+            priority: selectedPriority,
+            assignment: selectedAssignee
         )
         
         context.insert(newProject)
@@ -89,14 +90,16 @@ struct NewProjectView: View {
             VStack(alignment: .center, spacing: 15) {
                 // User Editable Project Title
                 TextField("Project Title", text: $projectTitle)
-                    .frame(maxWidth: .infinity)
                     .font(.title2)
+                    .multilineTextAlignment(.center)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .frame(maxWidth: 300)
                     .fontWeight(.semibold)
-                    .padding(12)
-                    .background(Color.white.opacity(0.2))
+                    .background(Color.white.opacity(0.5))
                     .cornerRadius(10)
                     .foregroundColor(.white)
-                    .padding(.top, 10)
+                    .padding(.top, 40)
                 
                 // Date Created
                 HStack {
@@ -227,17 +230,17 @@ struct NewProjectView: View {
                     }
                     
                     Button(action: {
-                        isDeleteTaskViewPresented = true
+                        isTaskViewPresented = true
                     }) {
-                        Text("Delete Task")
+                        Text("View Tasks")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color(red: 250/255, green: 250/255, blue: 245/255))
                             .foregroundColor(.black)
                             .cornerRadius(15)
                     }
-                    .sheet(isPresented: $isDeleteTaskViewPresented) {
-                        DeleteTaskView(tasks: $tasks)
+                    .sheet(isPresented: $isTaskViewPresented) {
+                        TaskView(tasks: $tasks)
                     }
                     
                     Button(action: saveProject) {

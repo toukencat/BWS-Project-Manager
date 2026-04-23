@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct DeleteTaskView: View {
+struct TaskView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     
@@ -53,7 +53,7 @@ struct DeleteTaskView: View {
             }
                 
             HStack {
-                Text("Delete Task")
+                Text("Task List")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -77,28 +77,24 @@ struct DeleteTaskView: View {
     }
     
     private func deleteTask(at offsets: IndexSet) {
-        for index in offsets {
-            let task = tasks[index]
-            if task.modelContext != nil {
-                context.delete(task)
-            }
-        }
         tasks.remove(atOffsets: offsets)
     }
 }
 
 #Preview {
-    DeleteTaskPreviewWrapper()
+    TaskPreviewWrapper()
 }
 
-struct DeleteTaskPreviewWrapper: View {
+
+struct TaskPreviewWrapper: View {
     @State private var tasks: [Task] = [
-        Task(title: "Book venue"),
-        Task(title: "Send invitations"),
-        Task(title: "Confirm catering")
+        Task(title: "Book venue", type: "Completion", descriptionText: "", isCompleted: false, expectedValue: nil, currentValue: nil),
+        Task(title: "Send invitations", type: "Completion", descriptionText: "", isCompleted: true, expectedValue: nil, currentValue: nil),
+        Task(title: "Confirm catering", type: "Completion", descriptionText: "", isCompleted: false, expectedValue: nil, currentValue: nil)
     ]
-    
+        
     var body: some View {
-        DeleteTaskView(tasks: $tasks)
+        TaskView(tasks: $tasks)
+            .modelContainer(for: Task.self, inMemory: true)
+        }
     }
-}

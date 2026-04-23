@@ -12,7 +12,7 @@ struct HomeView: View {
     @Query var projects: [Project]
     
     var body: some View {
-         NavigationView {
+         NavigationStack {
             ZStack {
                 // Background color
                 Color(red: 250/255, green: 250/255, blue: 245/255) // off-white

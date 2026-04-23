@@ -10,27 +10,10 @@ import SwiftData
 
 @main
 struct BWS_Project_PlannerApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView()
         }
-        WindowGroup {
-            NewProjectView()
-        }
-        .modelContainer(for: Project.self)
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: [Project.self, Task.self])
     }
 }

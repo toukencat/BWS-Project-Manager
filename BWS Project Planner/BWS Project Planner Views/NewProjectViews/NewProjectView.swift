@@ -19,6 +19,7 @@ struct NewProjectView: View {
     @State private var selectedProjectType: String = "Client Event"
     @State private var selectedPriority: String = "High"
     @State private var isNewTaskModalPresented: Bool = false
+    @State private var isDeleteTaskViewPresented = false
     @State private var tasks: [Task] = []
     
     // Date Selection
@@ -34,6 +35,18 @@ struct NewProjectView: View {
     private let months = Calendar.current.monthSymbols
     private let years = Array(Calendar.current.component(.year, from: Date())...(Calendar.current.component(.year, from: Date()) + 10))
     private let days = Array(1...31)
+    var validDays: [Int] {
+        let components = DateComponents(year: selectedYear, month: selectedMonthIndex + 1)
+        
+        guard
+            let date = Calendar.current.date(from: components),
+            let range = Calendar.current.range(of: .day, in: .month, for: date)
+        else {
+            return Array(1...31)
+        }
+        
+        return Array(range)
+    }
     
     private func saveProject() {
         let newProject = Project(
@@ -44,6 +57,11 @@ struct NewProjectView: View {
         )
         
         context.insert(newProject)
+        
+        for task in tasks {
+            task.project = newProject
+            context.insert(task)
+        }
         
         do {
             try context.save()
@@ -59,7 +77,7 @@ struct NewProjectView: View {
             Color(red: 128/255, green: 0/255, blue: 32/255) // burgundy wine
                 .edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 15) {
+            VStack(alignment: .center, spacing: 15) {
                 // User Editable Project Title
                 TextField("Project Title", text: $projectTitle)
                     .frame(maxWidth: .infinity)
@@ -101,7 +119,7 @@ struct NewProjectView: View {
                         
                         // Day Picker
                         Picker("Day", selection: $selectedDay) {
-                            ForEach(1...31, id: \.self) { day in
+                            ForEach(validDays, id: \.self) { day in
                                 Text("\(day)").tag(day)
                             }
                         }
@@ -117,7 +135,7 @@ struct NewProjectView: View {
                             }
                         }
                         .pickerStyle(WheelPickerStyle())
-                        .frame(width: 70, height: 150)
+                        .frame(width: 100, height: 150)
                         .background(Color.white.opacity(0.2))
                         .cornerRadius(10)
                         .accentColor(.white)
@@ -161,7 +179,7 @@ struct NewProjectView: View {
                 }
                 .padding(.horizontal)
                 
-                Spacer()
+                //Spacer()
                 
                 // Task Buttons
                 VStack(spacing: 15) {
@@ -176,6 +194,9 @@ struct NewProjectView: View {
                             .foregroundColor(.black)
                             .cornerRadius(15)
                     }
+                    .sheet(isPresented: $isNewTaskModalPresented) {
+                        NewTaskModalView(tasks: $tasks, isModalPresented: $isNewTaskModalPresented)
+                    }
                     
                     Button(action: { /* Assign Task action */ }) {
                         Text("Assign Task")
@@ -186,13 +207,18 @@ struct NewProjectView: View {
                             .cornerRadius(15)
                     }
                     
-                    Button(action: { /* Delete Task action */ }) {
+                    Button(action: {
+                        isDeleteTaskViewPresented = true
+                    }) {
                         Text("Delete Task")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color(red: 250/255, green: 250/255, blue: 245/255))
                             .foregroundColor(.black)
                             .cornerRadius(15)
+                    }
+                    .sheet(isPresented: $isDeleteTaskViewPresented) {
+                        DeleteTaskView(tasks: $tasks)
                     }
                     
                     Button(action: saveProject) {
@@ -220,17 +246,21 @@ struct NewProjectView: View {
         }
     }
     // Update the due date when the user selects a new date
-        private func updateDueDate() {
-            let components = DateComponents(year: selectedYear, month: selectedMonthIndex + 1, day: selectedDay)
-            if let newDate = Calendar.current.date(from: components) {
-                dueDate = newDate
-            }
+    private func updateDueDate() {
+        let maxDay = validDays.last ?? 31
+        if selectedDay > maxDay {
+            selectedDay = maxDay
         }
-}
-
-struct NewProjectView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewProjectView()
+        
+        let components = DateComponents(
+            year: selectedYear,
+            month: selectedMonthIndex + 1,
+            day: selectedDay
+        )
+        
+        if let newDate = Calendar.current.date(from: components) {
+            dueDate = newDate
+        }
     }
 }
 

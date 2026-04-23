@@ -9,7 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct NewTaskModalView: View {
-    // State Variables for Task Creation
+    
+    @Environment(\.dismiss) var dismiss
+    @Binding var tasks: [Task]
+    
+    // State Variables
     @Binding var isModalPresented: Bool // Binding to control the visibility of the modal
     @State private var taskTitle: String = ""
     @State private var selectedTaskType: String = "Completion"
@@ -17,8 +21,11 @@ struct NewTaskModalView: View {
     @State private var taskDescription: String = "Enter description here..."
     
     let taskTypes = ["Completion", "Numerical"]
+    var number: Int?
+    
     
     var body: some View {
+        // Background
         VStack {
             // Task Title
             TextField("Task Title", text: $taskTitle)
@@ -71,12 +78,15 @@ struct NewTaskModalView: View {
             // Save and Close Buttons
             HStack {
                 Button(action: {
-                    // Check if description is not the placeholder
-                    if taskDescription != "Enter description here..." && !taskDescription.isEmpty {
-                        // Save Task (Example - You could save it to a model or database)
-                        print("Task Saved: \(taskTitle), \(selectedTaskType), \(taskDescription)")
-                        self.isModalPresented = false
-                    }
+                    let newTask = Task(
+                        title: taskTitle,
+                        type: selectedTaskType,
+                        descriptionText: taskDescription,
+                        number: selectedTaskType == "Numerical" ? selectedNumber : nil
+                    )
+                    
+                    tasks.append(newTask)
+                    isModalPresented = false
                 }) {
                     Text("Save Task")
                         .frame(maxWidth: .infinity)
@@ -85,7 +95,6 @@ struct NewTaskModalView: View {
                         .foregroundColor(.white)
                         .cornerRadius(15)
                 }
-                .padding(.horizontal)
                 
                 Button(action: {
                     self.isModalPresented = false
@@ -111,8 +120,13 @@ struct NewTaskModalView: View {
 }
 
 struct NewTaskModalView_Previews: PreviewProvider {
+    @State static var tasksPreview: [Task] = []
+    @State static var modalPresented: Bool = true
+
     static var previews: some View {
-        NewTaskModalView(isModalPresented: .constant(true))
+        NewTaskModalView(
+            tasks: $tasksPreview,
+            isModalPresented: $modalPresented
+        )
     }
 }
-

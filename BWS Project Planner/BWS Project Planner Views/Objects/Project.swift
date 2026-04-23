@@ -16,6 +16,8 @@ class Project {
     var projectType: String
     var priority: String
     
+    @Relationship var tasks: [Task] = []
+    
     init(title: String,
          dateCreated: Date = Date(),
          dueDate: Date,

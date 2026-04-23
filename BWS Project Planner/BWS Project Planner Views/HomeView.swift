@@ -10,6 +10,7 @@ import SwiftData
 
 struct HomeView: View {
     @Query var projects: [Project]
+    @State private var projectList: [Project] = []
     
     var body: some View {
          NavigationStack {
@@ -31,7 +32,7 @@ struct HomeView: View {
                     VStack(spacing: 20) {
                         MenuButton(title: "New Project", destination: NewProjectView())
                         
-                        MenuButton(title: "Current Projects", destination: EmptyView())
+                        MenuButton(title: "Current Projects", destination: CurrentProjectsView(projects: $projectList))
                         
                         MenuButton(title: "Completed Projects", destination: EmptyView())
                         

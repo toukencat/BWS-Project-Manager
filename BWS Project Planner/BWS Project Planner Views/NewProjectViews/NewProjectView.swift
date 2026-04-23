@@ -32,7 +32,7 @@ struct NewProjectView: View {
     // Project type, priority level, and asignment options
     private let projectTypes = ["Client Event", "Team Event", "Office Planning", "Other"]
     private let priorityLevels = ["High", "Medium", "Low"]
-    private let assignees = ["D", "C", "J", "V", "Tammy", "All"]
+    private let assignees = ["D", "C", "J", "V", "T", "All"]
     
     // Date components for scroll pickers
     private let months = Calendar.current.monthSymbols

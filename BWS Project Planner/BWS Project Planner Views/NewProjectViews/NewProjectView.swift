@@ -21,15 +21,17 @@ struct NewProjectView: View {
     @State private var isNewTaskModalPresented: Bool = false
     @State private var isDeleteTaskViewPresented = false
     @State private var tasks: [Task] = []
-    
+    @State private var selectedAssignee: String = "All"
+
     // Date Selection
     @State private var selectedMonthIndex: Int = Calendar.current.component(.month, from: Date()) - 1
     @State private var selectedDay: Int = Calendar.current.component(.day, from: Date())
     @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
     
-    // Project type and priority options
+    // Project type, priority level, and asignment options
     private let projectTypes = ["Client Event", "Team Event", "Office Planning", "Other"]
     private let priorityLevels = ["High", "Medium", "Low"]
+    private let assignees = ["D", "C", "J", "V", "Tammy", "All"]
     
     // Date components for scroll pickers
     private let months = Calendar.current.monthSymbols
@@ -81,13 +83,13 @@ struct NewProjectView: View {
                 // User Editable Project Title
                 TextField("Project Title", text: $projectTitle)
                     .frame(maxWidth: .infinity)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding()
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(12)
                     .background(Color.white.opacity(0.2))
                     .cornerRadius(10)
                     .foregroundColor(.white)
-                    .padding(.top, 40)
+                    .padding(.top, 10)
                 
                 // Date Created
                 HStack {
@@ -131,7 +133,7 @@ struct NewProjectView: View {
                         // Year Picker
                         Picker("Year", selection: $selectedYear) {
                             ForEach(years, id: \.self) { year in
-                                Text("\(year)").tag(year)
+                                Text(String(year)).tag(year)
                             }
                         }
                         .pickerStyle(WheelPickerStyle())
@@ -140,17 +142,56 @@ struct NewProjectView: View {
                         .cornerRadius(10)
                         .accentColor(.white)
                     }
+                }
+                .padding(.horizontal)
+                
+                HStack(spacing: 10) {
+                    // Project Type Picker
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Project Type:")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                        Picker("Select Project Type", selection: $selectedProjectType) {
+                            ForEach(projectTypes, id: \.self) { type in
+                                Text(type)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                    }
                     .padding(.horizontal)
+                    
+                    // Project Priority Picker
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Project Priority:")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                        Picker("Select Priority", selection: $selectedPriority) {
+                            ForEach(priorityLevels, id: \.self) { level in
+                                Text(level)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                    }
+                    .padding(.horizontal)
+
                 }
-                                
-                // Project Type Picker
+                // Project Assignment Picker
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("Project Type:")
+                    Text("Assign Task:")
                         .foregroundColor(.white)
                         .fontWeight(.semibold)
-                    Picker("Select Project Type", selection: $selectedProjectType) {
-                        ForEach(projectTypes, id: \.self) { type in
-                            Text(type)
+                    
+                    Picker("Assign Task", selection: $selectedAssignee) {
+                        ForEach(assignees, id: \.self) { person in
+                            Text(person)
                         }
                     }
                     .pickerStyle(.menu)
@@ -160,25 +201,6 @@ struct NewProjectView: View {
                     .foregroundColor(.white)
                 }
                 .padding(.horizontal)
-                
-                // Project Priority Picker
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Project Priority:")
-                        .foregroundColor(.white)
-                        .fontWeight(.semibold)
-                    Picker("Select Priority", selection: $selectedPriority) {
-                        ForEach(priorityLevels, id: \.self) { level in
-                            Text(level)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .padding()
-                    .background(Color.white.opacity(0.2))
-                    .cornerRadius(10)
-                    .foregroundColor(.white)
-                }
-                .padding(.horizontal)
-                
                 //Spacer()
                 
                 // Task Buttons
@@ -196,15 +218,6 @@ struct NewProjectView: View {
                     }
                     .sheet(isPresented: $isNewTaskModalPresented) {
                         NewTaskModalView(tasks: $tasks, isModalPresented: $isNewTaskModalPresented)
-                    }
-                    
-                    Button(action: { /* Assign Task action */ }) {
-                        Text("Assign Task")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(red: 250/255, green: 250/255, blue: 245/255))
-                            .foregroundColor(.black)
-                            .cornerRadius(15)
                     }
                     
                     Button(action: {
@@ -226,6 +239,15 @@ struct NewProjectView: View {
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                    }
+                    
+                    Button(action: dismiss()) {
+                        Text("Exit Project")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.red)
                             .foregroundColor(.white)
                             .cornerRadius(15)
                     }

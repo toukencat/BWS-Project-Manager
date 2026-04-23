@@ -11,11 +11,13 @@ import SwiftData
 struct CompletedProjectsView: View {
     var projects: [Project]
     
-    // Function to calculate the total count for each project type
+    var completedProjects: [Project] {
+        projects.filter { $0.isCompleted }
+    }
+    
     func projectTypeDistribution() -> [String: Int] {
         var typeCount: [String: Int] = ["Client Event": 0, "Team Event": 0, "Office Planning": 0, "Other": 0]
-        
-        for project in projects {
+        for project in completedProjects {
             let type = project.projectType
             if typeCount.keys.contains(type) {
                 typeCount[type, default: 0] += 1
@@ -26,11 +28,9 @@ struct CompletedProjectsView: View {
         return typeCount
     }
     
-    // Function to calculate the total count for each priority level
     func priorityDistribution() -> [String: Int] {
         var priorityCount: [String: Int] = ["High": 0, "Medium": 0, "Low": 0]
-
-        for project in projects {
+        for project in completedProjects {
             let completedTasks = project.tasks.filter { $0.isCompleted }
             let priority = project.priority
             if !completedTasks.isEmpty && priorityCount.keys.contains(priority) {
@@ -43,38 +43,37 @@ struct CompletedProjectsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
-                // Title
                 Text("Completed Projects")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top, 50)
-
-                // Pie Chart for Project Type Distribution
-                PieChartView(data: projectTypeDistribution().values.map { Double($0) }, labels: projectTypeDistribution().keys.map { $0 }, colors: [
-                    Color.blue, Color.purple, Color.pink, Color.orange
-                ])
-                .frame(width: 300, height: 300)
-                .padding()
-
-                // Pie Chart for Priority Distribution
-                PieChartView(data: priorityDistribution().values.map { Double($0) }, labels: priorityDistribution().keys.map { $0 }, colors: [
-                    Color.red, Color.yellow, Color.green
-                ])
-                .frame(width: 300, height: 300)
-                .padding()
-            
-                // List of Completed Projects
+                
+                HStack(spacing: 20) {
+                    PieChartView(
+                        data: projectTypeDistribution().values.map { Double($0) },
+                        labels: projectTypeDistribution().keys.map { $0 },
+                        colors: [Color.blue, Color.purple, Color.pink, Color.orange]
+                    )
+                    .frame(width: 150, height: 150)
+                    
+                    PieChartView(
+                        data: priorityDistribution().values.map { Double($0) },
+                        labels: priorityDistribution().keys.map { $0 },
+                        colors: [Color.red, Color.yellow, Color.green]
+                    )
+                    .frame(width: 150, height: 150)
+                }
+                
                 Text("Projects with All Tasks Completed")
                     .font(.headline)
                     .foregroundColor(.black)
                     .padding(.top, 20)
-
+                
                 ForEach(projects.filter { $0.tasks.allSatisfy { $0.isCompleted } }) { project in
                     VStack(alignment: .leading) {
                         Text(project.title)
                             .font(.body)
                             .fontWeight(.semibold)
-            
                         Text("Project Type: \(project.projectType)")
                             .font(.subheadline)
                             .foregroundColor(.gray)
@@ -90,55 +89,68 @@ struct CompletedProjectsView: View {
     }
 }
 
-// Custom Pie Slice View to Draw Each Slice of the Pie
+// PieSliceView
 struct PieSliceView: View {
     var startAngle: Angle
     var endAngle: Angle
     var color: Color
-
+    
     var body: some View {
-        Path { path in
-            path.move(to: .zero)
-            path.addArc(center: .zero, radius: 1, startAngle: startAngle, endAngle: endAngle, clockwise: false)
+        GeometryReader { geometry in
+            Path { path in
+                let rect = geometry.frame(in: .local)
+                let center = CGPoint(x: rect.midX, y: rect.midY)
+                let radius = min(rect.width, rect.height) / 2
+                path.move(to: center)
+                path.addArc(center: center,
+                            radius: radius,
+                            startAngle: startAngle,
+                            endAngle: endAngle,
+                            clockwise: false)
+            }
+            .fill(color)
         }
-        .fill(color)
-        .rotationEffect(Angle(degrees: -90)) // To start the pie chart from the top
-        .offset(x: 150, y: 150) // Offset to center the pie chart
     }
 }
 
-// Custom Pie Chart View that Uses PieSliceView to Draw Pie Chart
+// PieChartView
 struct PieChartView: View {
     var data: [Double]
     var labels: [String]
     var colors: [Color]
     
+    private var slices: [(start: Double, end: Double, color: Color, label: String)] {
+        var startAngle = 0.0
+        let total = data.reduce(0, +)
+        var result: [(Double, Double, Color, String)] = []
+        for i in 0..<data.count {
+            let angle = data[i] / total * 360
+            result.append((start: startAngle, end: startAngle + angle, color: colors[i], label: labels[i]))
+            startAngle += angle
+        }
+        return result
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                let total = data.reduce(0, +)
-                var startAngle = 0.0
-                
-                ForEach(0..<data.count, id: \.self) { i in
-                    let angle = data[i] / total * 360
-                    let endAngle = startAngle + angle
+                ForEach(0..<slices.count, id: \.self) { i in
+                    PieSliceView(
+                        startAngle: Angle(degrees: slices[i].start),
+                        endAngle: Angle(degrees: slices[i].end),
+                        color: slices[i].color
+                    )
+                    .frame(width: geometry.size.width, height: geometry.size.width)
                     
-                    // Draw each pie slice
-                    PieSliceView(startAngle: Angle(degrees: startAngle), endAngle: Angle(degrees: endAngle), color: colors[i])
-                        .frame(width: geometry.size.width, height: geometry.size.width)
-                    startAngle = endAngle
-                }
-                
-                // Add labels for each slice
-                startAngle = 0.0
-                ForEach(0..<data.count, id: \.self) { i in
-                    Text(labels[i])
+                    let midAngle = (slices[i].start + slices[i].end) / 2
+                    Text(slices[i].label)
                         .foregroundColor(.white)
                         .font(.caption)
                         .bold()
-                        .offset(x: (geometry.size.width / 3) * cos((startAngle + (data[i] / total) * 180) * .pi / 180),
-                                y: (geometry.size.width / 3) * sin((startAngle + (data[i] / total) * 180) * .pi / 180))
-                    startAngle += data[i] / total * 360
+                        .position(
+                            x: geometry.size.width / 2 + (geometry.size.width / 3) * CGFloat(cos(midAngle * .pi / 180)),
+                            y: geometry.size.height / 2 + (geometry.size.width / 3) * CGFloat(sin(midAngle * .pi / 180))
+                        )
                 }
             }
         }
@@ -148,50 +160,57 @@ struct PieChartView: View {
 
 struct CompletedProjectsView_Previews: PreviewProvider {
     static var previews: some View {
-        // Mock data for preview
-        let mockProjects: [Project] = [
-            Project(title: "Client Event 1",
-                    dueDate: Date(), 
-                    projectType: "Client Event",
-                    priority: "High",
-                    assignment: "T"),
-
-            Project(title: "Team Event 1",
-                    dueDate: Date(),
-                    projectType: "Team Event",
-                    priority: "Medium",
-                    assignment: "V"),
-
-            Project(title: "Office Planning 1",
-                    dueDate: Date(),
-                    projectType: "Office Planning",
-                    priority: "Low",
-                    assignment: "C"),
-
-            Project(title: "Other Event 1",
-                    dueDate: Date(),
-                    projectType: "Other",
-                    priority: "Medium",
-                    assignment: "All")
-        ]
-        
-        let projectsWithTasks = mockProjects
+        // Mock Projects
+        let project1 = Project(
+            title: "Client Event 1",
+            dueDate: Date(),
+            projectType: "Client Event",
+            priority: "High",
+            assignment: "T"
+        )
+        let project2 = Project(
+            title: "Team Event 1",
+            dueDate: Date(),
+            projectType: "Team Event",
+            priority: "Medium",
+            assignment: "V"
+        )
+        let project3 = Project(
+            title: "Office Planning 1",
+            dueDate: Date(),
+            projectType: "Office Planning",
+            priority: "Low",
+            assignment: "C"
+        )
+        let project4 = Project(
+            title: "Other Event 1",
+            dueDate: Date(),
+            projectType: "Other",
+            priority: "Medium",
+            assignment: "All"
+        )
         
         // Add tasks to each project
-        projectsWithTasks[0].tasks.append(Task(title: "Task 1", isCompleted: true, currentValue: nil, project: projectsWithTasks[0]))
-        projectsWithTasks[0].tasks.append(Task(title: "Task 2", isCompleted: true, currentValue: nil, project: projectsWithTasks[0]))
+        project1.tasks = [
+            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project1),
+            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project1)
+        ]
+        project2.tasks = [
+            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project2),
+            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project2)
+        ]
+        project3.tasks = [
+            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project3),
+            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project3)
+        ]
+        project4.tasks = [
+            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project4),
+            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project4)
+        ]
         
-        projectsWithTasks[1].tasks.append(Task(title: "Task 1", isCompleted: true, currentValue: nil, project: projectsWithTasks[1]))
-        projectsWithTasks[1].tasks.append(Task(title: "Task 2", isCompleted: true, currentValue: nil, project: projectsWithTasks[1]))
+        let mockProjects = [project1, project2, project3, project4]
         
-        projectsWithTasks[2].tasks.append(Task(title: "Task 1", isCompleted: true, currentValue: nil, project: projectsWithTasks[2]))
-        projectsWithTasks[2].tasks.append(Task(title: "Task 2", isCompleted: true, currentValue: nil, project: projectsWithTasks[2]))
-        
-        projectsWithTasks[3].tasks.append(Task(title: "Task 1", isCompleted: true, currentValue: nil, project: projectsWithTasks[3]))
-        projectsWithTasks[3].tasks.append(Task(title: "Task 2", isCompleted: true, currentValue: nil, project: projectsWithTasks[3]))
-
-        // Return CompletedProjectsView with mock projects
-        return CompletedProjectsView(projects: projectsWithTasks)
+        return CompletedProjectsView(projects: mockProjects)
             .previewLayout(.sizeThatFits)
             .padding()
     }

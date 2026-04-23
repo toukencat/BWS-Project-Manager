@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 class Project: Identifiable {
+    @Attribute(.unique) var id: UUID = UUID()
     var title: String
     var dateCreated: Date
     var dueDate: Date
@@ -18,6 +19,10 @@ class Project: Identifiable {
     var assignment: String
     
     @Relationship var tasks: [Task] = []
+    
+    var isCompleted: Bool {
+        return tasks.allSatisfy { $0.isCompleted }
+    }
     
     init(title: String,
          dateCreated: Date = Date(),

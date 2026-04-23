@@ -17,8 +17,8 @@ struct TaskView: View {
     var body: some View {
         ZStack(alignment: .top) {
             // Background
-            Color(red: 128/255, green: 0/255, blue: 32/255)
-                .edgesIgnoringSafeArea(.all)
+            Color(hex: "#70285b")
+                .ignoresSafeArea()
             
             VStack(spacing: 10) {
                 

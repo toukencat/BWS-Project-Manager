@@ -33,14 +33,17 @@ struct HomeView: View {
                         MenuButton(title: "New Project", destination: NewProjectView())
                         
                         MenuButton(title: "Current Projects", destination: CurrentProjectsView(projects: $projectList))
-                        
-                        MenuButton(title: "Completed Projects", destination: EmptyView())
-                        
+                                            
+                        MenuButton(title: "Completed Projects", destination: CompletedProjectsView(projects: projectList))
+                                                
                         MenuButton(title: "Messaging", destination: EmptyView())
                     }
                     .padding(.horizontal, 40)
                     .frame(maxHeight: .infinity)
                     Spacer()
+                }
+                .onAppear {
+                    projectList = projects
                 }
             }
         }
@@ -57,7 +60,7 @@ struct MenuButton<Destination: View>: View {
             Text(title)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color(red: 128/255, green: 0/255, blue: 32/255)) // burgundy wine
+                .background(Color(hex: "#70285b"))
                 .foregroundColor(.white)
                 .cornerRadius(15)
         }

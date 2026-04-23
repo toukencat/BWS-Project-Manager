@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 class Task: Identifiable {
+    @Attribute(.unique) var id: UUID = UUID()
     var title: String
     var type: String
     var descriptionText: String

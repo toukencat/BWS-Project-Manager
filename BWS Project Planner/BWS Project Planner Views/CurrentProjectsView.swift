@@ -14,11 +14,17 @@ struct CurrentProjectsView: View {
     
     @Binding var projects: [Project]
     
+    @State private var selectedProject: Project?
+    
+    var currentProjects: [Project] {
+        projects.filter { !$0.isCompleted }
+    }
+    
     var body: some View {
         ZStack(alignment: .top) {
             // Background
-            Color(red: 128/255, green: 0/255, blue: 32/255)
-                .edgesIgnoringSafeArea(.all)
+            Color(hex: "#70285b")
+                .ignoresSafeArea()
             
             VStack(spacing: 10) {
                 
@@ -33,15 +39,24 @@ struct CurrentProjectsView: View {
                 } else {
                     List {
                         ForEach(projects) { project in
-                            Text(project.title)
-                                .foregroundColor(.black)
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color(red: 250/255, green: 250/255, blue: 245/255))
-                                .cornerRadius(12)
-                                .listRowInsets(EdgeInsets())
+                            Button(action: {
+                                selectedProject = project
+                            }) {
+                                VStack(alignment: .leading) {
+                                    Text(project.title)
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(Color(red: 250/255, green: 250/255, blue: 245/255))
+                                        .cornerRadius(12)
+                                                            
+                                                            // Add a separator to make it visually clear
+                                    Divider()
+                                        .padding(.top, 5)
+                                }
                                 .padding(.vertical, 5)
-                                .listRowBackground(Color.clear)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                         .onDelete(perform: deleteProject)
                     }
@@ -74,6 +89,12 @@ struct CurrentProjectsView: View {
             }
             .padding(.horizontal)
             .padding(.top, 50)
+        }
+        .fullScreenCover(item: $selectedProject) { project in
+            let currentValue = project.tasks.filter { $0.type == "Numerical" }.map { $0.currentValue ?? 0 }.reduce(0, +)
+            let expectedValue = project.tasks.filter { $0.type == "Numerical" }.map { $0.expectedValue ?? 0 }.reduce(0, +)
+
+            ProjectView(project: project, currentValue: currentValue, expectedValue: expectedValue)
         }
     }
     

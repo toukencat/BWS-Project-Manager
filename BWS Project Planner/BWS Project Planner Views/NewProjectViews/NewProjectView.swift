@@ -32,7 +32,7 @@ struct NewProjectView: View {
     // Project type, priority level, and asignment options
     private let projectTypes = ["Client Event", "Team Event", "Office Planning", "Other"]
     private let priorityLevels = ["High", "Medium", "Low"]
-    private let assignees = ["D", "C", "J", "V", "T", "All"]
+    private let assignees = ["DB", "CV", "JA", "VO", "TS", "All"]
     
     // Date components for scroll pickers
     private let months = Calendar.current.monthSymbols
@@ -84,8 +84,8 @@ struct NewProjectView: View {
     var body: some View {
         ZStack {
             // Background
-            Color(red: 128/255, green: 0/255, blue: 32/255) // burgundy wine
-                .edgesIgnoringSafeArea(.all)
+            Color(hex: "#70285b")
+                .ignoresSafeArea()
             
             VStack(alignment: .center, spacing: 15) {
                 // User Editable Project Title

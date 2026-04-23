@@ -12,8 +12,6 @@ struct ProjectView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     
-    //@Binding var projects: [Project]
-    
     let project: Project
     var currentValue: Int
     var expectedValue: Int
@@ -56,7 +54,7 @@ struct ProjectView: View {
     var body: some View {
         ZStack {
             // Background
-            Color(red: 128/255, green: 0/255, blue: 32/255)
+            Color(hex: "#70285b")
                 .ignoresSafeArea()
             
             VStack(spacing: 15) {
@@ -76,7 +74,6 @@ struct ProjectView: View {
                 
                 // Dashboard screen
                 VStack(spacing: 20) {
-                    
                     Text(project.projectType)
                         .font(.headline)
                         .foregroundColor(.black)
@@ -140,7 +137,6 @@ struct ProjectView: View {
                         // Tasks to be completed list
                         ScrollView {
                             VStack(alignment: .leading, spacing: 10) {
-                                                    
                                 Text("Tasks")
                                         .font(.headline)
                                         .foregroundColor(.black)
@@ -177,6 +173,7 @@ struct ProjectView: View {
                     }
                 }
             }
+            .padding(.top, 0)
         }
     }
 }

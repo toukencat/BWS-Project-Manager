@@ -10,60 +10,67 @@ import SwiftData
 
 struct HomeView: View {
     @Query var projects: [Project]
-    @State private var projectList: [Project] = []
+    
+    @State private var showCurrentProjects = false
+    @State private var showCompletedProjects = false
+    @State private var showNewProject = false
+    @State private var showMessaging = false
     
     var body: some View {
-         NavigationStack {
-            ZStack {
-                // Background color
-                Color(red: 250/255, green: 250/255, blue: 245/255) // off-white
-                    .edgesIgnoringSafeArea(.all)
+        ZStack {
+            Color(red: 250/255, green: 250/255, blue: 245/255)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 30) {
+                Text("Project Manager")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.top, 50)
                 
-                VStack(spacing: 30) {
-                    // Title
-                    Text("Project Manager")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.top, 50)
+                Spacer()
+                
+                VStack(spacing: 20) {
+                    Button("New Project") { showNewProject = true }
+                        .menuButtonStyle()
                     
-                    Spacer()
+                    Button("Current Projects") { showCurrentProjects = true }
+                        .menuButtonStyle()
                     
-                    // Buttons
-                    VStack(spacing: 20) {
-                        MenuButton(title: "New Project", destination: NewProjectView())
-                        
-                        MenuButton(title: "Current Projects", destination: CurrentProjectsView(projects: $projectList))
-                                            
-                        MenuButton(title: "Completed Projects", destination: CompletedProjectsView(projects: projectList))
-                                                
-                        MenuButton(title: "Messaging", destination: ChatBotView())
-                    }
-                    .padding(.horizontal, 40)
-                    .frame(maxHeight: .infinity)
-                    Spacer()
+                    Button("Completed Projects") { showCompletedProjects = true }
+                        .menuButtonStyle()
+                    
+                    Button("Messaging") { showMessaging = true }
+                        .menuButtonStyle()
                 }
-                .onAppear {
-                    projectList = projects
-                }
+                .padding(.horizontal, 40)
+                
+                Spacer()
             }
+        }
+        .sheet(isPresented: $showNewProject) {
+            NewProjectView()
+        }
+        .sheet(isPresented: $showCurrentProjects) {
+            CurrentProjectsView(projects: .constant(projects))
+        }
+        .sheet(isPresented: $showCompletedProjects) {
+            CompletedProjectsView(projects: projects)
+        }
+        .sheet(isPresented: $showMessaging) {
+            ChatBotView()
         }
     }
 }
 
-// Reusable button component
-struct MenuButton<Destination: View>: View {
-    let title: String
-    let destination: Destination
-    
-    var body: some View {
-        NavigationLink(destination: destination) {
-            Text(title)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(hex: "#70285b"))
-                .foregroundColor(.white)
-                .cornerRadius(15)
-        }
+// Reusable button style
+extension View {
+    func menuButtonStyle() -> some View {
+        self
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color(hex: "#70285b"))
+            .foregroundColor(.white)
+            .cornerRadius(15)
     }
 }
 

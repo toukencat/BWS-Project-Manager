@@ -57,7 +57,7 @@ struct NewProjectView: View {
         
         do {
             try context.save()
-            dismiss() // optional: close view
+            dismiss()
         } catch {
             print("Failed to save project: \(error)")
         }
@@ -228,7 +228,7 @@ struct NewProjectView: View {
                     .sheet(isPresented: $isNewTaskModalPresented) {
                         NewTaskModalView(tasks: $tasks, isModalPresented: $isNewTaskModalPresented)
                     }
-                    
+                    // View tasks
                     Button(action: {
                         isTaskViewPresented = true
                     }) {
@@ -242,7 +242,7 @@ struct NewProjectView: View {
                     .sheet(isPresented: $isTaskViewPresented) {
                         ProjectTaskView(tasks: $tasks)
                     }
-                    
+                    // Save Project
                     Button(action: saveProject) {
                         Text("Save Project")
                             .frame(maxWidth: .infinity)
@@ -251,7 +251,7 @@ struct NewProjectView: View {
                             .foregroundColor(.white)
                             .cornerRadius(15)
                     }
-                    
+                    // Exit Project
                     Button(action: {
                         if hasChanges {
                             showExitConfirmation = true

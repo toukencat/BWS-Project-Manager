@@ -50,7 +50,6 @@ struct CurrentProjectsView: View {
                                         .background(Color(red: 250/255, green: 250/255, blue: 245/255))
                                         .cornerRadius(12)
                                                             
-                                                            // Add a separator to make it visually clear
                                     Divider()
                                         .padding(.top, 5)
                                 }
@@ -90,11 +89,11 @@ struct CurrentProjectsView: View {
             .padding(.horizontal)
             .padding(.top, 50)
         }
-        .fullScreenCover(item: $selectedProject) { project in
+        .sheet(item: $selectedProject) { project in
             let currentValue = project.tasks.filter { $0.type == "Numerical" }.map { $0.currentValue ?? 0 }.reduce(0, +)
             let expectedValue = project.tasks.filter { $0.type == "Numerical" }.map { $0.expectedValue ?? 0 }.reduce(0, +)
-
-            ProjectView(project: project, currentValue: currentValue, expectedValue: expectedValue)
+                    
+            ProjectView(project: project, currentValue: currentValue, expectedValue: expectedValue, dismissProject: { selectedProject = nil })
         }
     }
     

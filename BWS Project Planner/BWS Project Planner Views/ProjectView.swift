@@ -15,6 +15,7 @@ struct ProjectView: View {
     let project: Project
     var currentValue: Int
     var expectedValue: Int
+    var dismissProject: () -> Void
     
     var completionTasks: [ProjectTask] {
         (project.tasks).filter { $0.type == "Completion" }
@@ -195,21 +196,19 @@ struct ProjectView: View {
         }
     }
 }
-    
-import SwiftUI
-import SwiftData
 
 struct ProjectPreviewWrapper: View {
     
     var body: some View {
-        // Create a ModelContainer for preview purposes
+        // Create an in-memory ModelContainer for preview
         let container = try! ModelContainer(
             for: Project.self, ProjectTask.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         
-        // Create a mock project and tasks
         let context = container.mainContext
+        
+        // Create a mock project
         let project = Project(
             title: "Event Planning",
             dueDate: Date(),
@@ -217,29 +216,32 @@ struct ProjectPreviewWrapper: View {
             priority: "High",
             assignment: "All"
         )
-        
-        // Insert the project into the context
         context.insert(project)
         
+        // Create mock tasks
         let tasks = [
             ProjectTask(title: "Book venue", type: "Completion", isCompleted: true, currentValue: nil, project: project),
             ProjectTask(title: "Send invites", type: "Completion", isCompleted: false, currentValue: nil, project: project),
             ProjectTask(title: "Confirm catering", type: "Completion", isCompleted: false, currentValue: nil, project: project),
             ProjectTask(title: "Budget Tracking", type: "Numerical", isCompleted: false, expectedValue: 100, currentValue: 40, project: project)
         ]
-        
         tasks.forEach { context.insert($0) }
         
-        // Wrap ProjectView with model context for preview
-        return ProjectView(project: project, currentValue: 40, expectedValue: 100)
-            .modelContainer(container)
+        // Wrap ProjectView with dummy dismiss closure
+        return ProjectView(
+            project: project,
+            currentValue: 40,
+            expectedValue: 100,
+            dismissProject: { /* no-op for preview */ }
+        )
+        .modelContainer(container)
+        .previewLayout(.sizeThatFits)
+        .padding()
     }
 }
 
 struct ProjectPreviewWrapper_Previews: PreviewProvider {
     static var previews: some View {
         ProjectPreviewWrapper()
-            .previewLayout(.sizeThatFits)
-            .padding()
     }
 }

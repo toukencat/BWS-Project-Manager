@@ -29,33 +29,9 @@
 		3C18757C2F93719400377703 /* BWS Project PlannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BWS Project PlannerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "BWS Project Planner" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				HomeView.swift,
-			);
-			target = 3C1875622F93719200377703 /* BWS Project Planner */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 3C1875612F93719200377703 /* Resources */;
-			membershipExceptions = (
-				HomeView.swift,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3C1875652F93719200377703 /* BWS Project Planner Views */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "BWS Project Planner" target */,
-				3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */,
-			);
 			path = "BWS Project Planner Views";
 			sourceTree = "<group>";
 		};

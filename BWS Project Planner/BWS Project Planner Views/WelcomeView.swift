@@ -9,7 +9,6 @@ import SwiftUI
 
 struct WelcomeView: View {
     var body: some View {
-<<<<<<< HEAD
         VStack{
             Image("BWSlogo")
             Text("Project Manager")
@@ -17,9 +16,6 @@ struct WelcomeView: View {
                 .fontWeight(.medium)
         }
         .padding()
-=======
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
->>>>>>> main
     }
 }
 

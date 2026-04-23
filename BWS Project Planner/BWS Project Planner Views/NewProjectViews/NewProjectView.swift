@@ -20,6 +20,7 @@ struct NewProjectView: View {
     @State private var selectedPriority: String = "High"
     @State private var isNewTaskModalPresented: Bool = false
     @State private var isDeleteTaskViewPresented = false
+    @State private var showExitConfirmation = false
     @State private var tasks: [Task] = []
     @State private var selectedAssignee: String = "All"
 
@@ -37,18 +38,6 @@ struct NewProjectView: View {
     private let months = Calendar.current.monthSymbols
     private let years = Array(Calendar.current.component(.year, from: Date())...(Calendar.current.component(.year, from: Date()) + 10))
     private let days = Array(1...31)
-    var validDays: [Int] {
-        let components = DateComponents(year: selectedYear, month: selectedMonthIndex + 1)
-        
-        guard
-            let date = Calendar.current.date(from: components),
-            let range = Calendar.current.range(of: .day, in: .month, for: date)
-        else {
-            return Array(1...31)
-        }
-        
-        return Array(range)
-    }
     
     private func saveProject() {
         let newProject = Project(
@@ -71,6 +60,24 @@ struct NewProjectView: View {
         } catch {
             print("Failed to save project: \(error)")
         }
+    }
+    
+    var validDays: [Int] {
+        let components = DateComponents(year: selectedYear, month: selectedMonthIndex + 1)
+        
+        guard
+            let date = Calendar.current.date(from: components),
+            let range = Calendar.current.range(of: .day, in: .month, for: date)
+        else {
+            return Array(1...31)
+        }
+        
+        return Array(range)
+    }
+    
+    var hasChanges: Bool {
+        projectTitle != "New Project" ||
+        !tasks.isEmpty
     }
     
     var body: some View {
@@ -201,7 +208,6 @@ struct NewProjectView: View {
                     .foregroundColor(.white)
                 }
                 .padding(.horizontal)
-                //Spacer()
                 
                 // Task Buttons
                 VStack(spacing: 15) {
@@ -243,7 +249,13 @@ struct NewProjectView: View {
                             .cornerRadius(15)
                     }
                     
-                    Button(action: dismiss()) {
+                    Button(action: {
+                        if hasChanges {
+                            showExitConfirmation = true
+                        } else {
+                            dismiss()
+                        }
+                    }) {
                         Text("Exit Project")
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -265,6 +277,20 @@ struct NewProjectView: View {
         }
         .onChange(of: selectedYear) {
             updateDueDate()
+        }
+        
+        .confirmationDialog(
+            "Unsaved Changes",
+            isPresented: $showExitConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Exit Without Saving", role: .destructive) {
+                dismiss()
+            }
+            
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("You have unsaved changes. Are you sure you want to exit? Click off window to close pop-up.")
         }
     }
     // Update the due date when the user selects a new date

@@ -16,7 +16,7 @@ struct ProjectView: View {
     var currentValue: Int
     var expectedValue: Int
     
-    var completionTasks: [Task] {
+    var completionTasks: [ProjectTask] {
         (project.tasks).filter { $0.type == "Completion" }
     }
     
@@ -29,11 +29,11 @@ struct ProjectView: View {
         return Double(completedCount) / Double(completionTasks.count)
     }
     
-    var numericalTasks: [Task] {
+    var numericalTasks: [ProjectTask] {
         project.tasks.filter { $0.type == "Numerical" }
     }
 
-    func progress(for task: Task) -> Double {
+    func progress(for task: ProjectTask) -> Double {
         guard let current = task.currentValue,
               let max = task.expectedValue,
               max > 0 else { return 0 }
@@ -59,10 +59,21 @@ struct ProjectView: View {
             
             VStack(spacing: 15) {
                 VStack(spacing: 5) {
-                    Text(project.title)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
+                    HStack(spacing: 10) {
+                        Text(project.title)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.title)
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                    }
                     
                     Text("Created: \(project.dateCreated.formatted(date: .abbreviated, time: .omitted))")
                         .foregroundColor(.white.opacity(0.8))
@@ -173,7 +184,14 @@ struct ProjectView: View {
                     }
                 }
             }
-            .padding(.top, 0)
+            Button(action: {
+                dismiss()
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
+            }
         }
     }
 }
@@ -186,7 +204,7 @@ struct ProjectPreviewWrapper: View {
     var body: some View {
         // Create a ModelContainer for preview purposes
         let container = try! ModelContainer(
-            for: Project.self, Task.self,
+            for: Project.self, ProjectTask.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         
@@ -204,10 +222,10 @@ struct ProjectPreviewWrapper: View {
         context.insert(project)
         
         let tasks = [
-            Task(title: "Book venue", type: "Completion", isCompleted: true, currentValue: nil, project: project),
-            Task(title: "Send invites", type: "Completion", isCompleted: false, currentValue: nil, project: project),
-            Task(title: "Confirm catering", type: "Completion", isCompleted: false, currentValue: nil, project: project),
-            Task(title: "Budget Tracking", type: "Numerical", isCompleted: false, expectedValue: 100, currentValue: 40, project: project)
+            ProjectTask(title: "Book venue", type: "Completion", isCompleted: true, currentValue: nil, project: project),
+            ProjectTask(title: "Send invites", type: "Completion", isCompleted: false, currentValue: nil, project: project),
+            ProjectTask(title: "Confirm catering", type: "Completion", isCompleted: false, currentValue: nil, project: project),
+            ProjectTask(title: "Budget Tracking", type: "Numerical", isCompleted: false, expectedValue: 100, currentValue: 40, project: project)
         ]
         
         tasks.forEach { context.insert($0) }

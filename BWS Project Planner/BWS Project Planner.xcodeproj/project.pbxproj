@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3C6E07652F99CC4D00E66DD9 /* BWS_Project_PlannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6E07582F99CC4D00E66DD9 /* BWS_Project_PlannerApp.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3C1875732F93719400377703 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		3C1875632F93719200377703 /* BWS Project Planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BWS Project Planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C1875722F93719400377703 /* BWS Project PlannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BWS Project PlannerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C18757C2F93719400377703 /* BWS Project PlannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BWS Project PlannerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C6E07582F99CC4D00E66DD9 /* BWS_Project_PlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BWS_Project_PlannerApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		3C18755A2F93719200377703 = {
 			isa = PBXGroup;
 			children = (
+				3C6E07582F99CC4D00E66DD9 /* BWS_Project_PlannerApp.swift */,
 				3C1875652F93719200377703 /* BWS Project Planner Views */,
 				3C1875752F93719400377703 /* BWS Project PlannerTests */,
 				3C18757F2F93719400377703 /* BWS Project PlannerUITests */,
@@ -239,6 +245,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C6E07652F99CC4D00E66DD9 /* BWS_Project_PlannerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,11 +9,11 @@ import SwiftUI
 import SwiftData
 
 @main
-struct BWS_Project_PlannerApp: App {
+struct BWS_Project_Planner: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
         }
-        .modelContainer(for: [Project.self, Task.self])
+        .modelContainer(for: [Project.self, ProjectTask.self])
     }
 }

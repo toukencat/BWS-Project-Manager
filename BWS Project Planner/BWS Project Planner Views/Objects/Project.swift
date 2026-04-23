@@ -18,10 +18,10 @@ class Project: Identifiable {
     var priority: String
     var assignment: String
     
-    @Relationship var tasks: [Task] = []
+    @Relationship var tasks: [ProjectTask] = []
     
     var isCompleted: Bool {
-        return tasks.allSatisfy { $0.isCompleted }
+        !tasks.isEmpty && tasks.allSatisfy { $0.isCompleted }
     }
     
     init(title: String,

@@ -8,11 +8,11 @@
 import SwiftUI
 import SwiftData
 
-struct TaskView: View {
+struct ProjectTaskView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     
-    @Binding var tasks: [Task]
+    @Binding var tasks: [ProjectTask]
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -87,14 +87,14 @@ struct TaskView: View {
 
 
 struct TaskPreviewWrapper: View {
-    @State private var tasks: [Task] = [
-        Task(title: "Book venue", type: "Completion", descriptionText: "", isCompleted: false, expectedValue: nil, currentValue: nil),
-        Task(title: "Send invitations", type: "Completion", descriptionText: "", isCompleted: true, expectedValue: nil, currentValue: nil),
-        Task(title: "Confirm catering", type: "Completion", descriptionText: "", isCompleted: false, expectedValue: nil, currentValue: nil)
+    @State private var tasks: [ProjectTask] = [
+        ProjectTask(title: "Book venue", type: "Completion", descriptionText: "", isCompleted: false, expectedValue: nil, currentValue: nil),
+        ProjectTask(title: "Send invitations", type: "Completion", descriptionText: "", isCompleted: true, expectedValue: nil, currentValue: nil),
+        ProjectTask(title: "Confirm catering", type: "Completion", descriptionText: "", isCompleted: false, expectedValue: nil, currentValue: nil)
     ]
         
     var body: some View {
-        TaskView(tasks: $tasks)
-            .modelContainer(for: Task.self, inMemory: true)
+        ProjectTaskView(tasks: $tasks)
+            .modelContainer(for: ProjectTask.self, inMemory: true)
         }
     }

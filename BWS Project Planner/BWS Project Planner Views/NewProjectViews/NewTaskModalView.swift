@@ -9,10 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct NewTaskModalView: View {
-    
     @Environment(\.dismiss) var dismiss
-    
-    @Binding var tasks: [Task]
+    @Binding var tasks: [ProjectTask]
     @Binding var isModalPresented: Bool
     
     // State Variables
@@ -20,7 +18,7 @@ struct NewTaskModalView: View {
     @State private var selectedTaskType: String = "Completion"
     @State private var selectedNumber: Int = 0
     @State private var selectedTaskCompleted: Bool = false
-    @State private var taskDescription: String = "Enter description here..."
+    @State private var descriptionText: String = "Enter description here..."
     
     let taskTypes = ["Completion", "Numerical"]
     
@@ -62,16 +60,14 @@ struct NewTaskModalView: View {
                 .cornerRadius(10)
                 .foregroundColor(.white)
                 .padding(.horizontal)
-            } else if selectedTaskType == "Completion" {
+            } else {
                 Button(action: {
                     selectedTaskCompleted.toggle()
                 }) {
                     HStack {
                         Text("Task Completed")
                             .foregroundColor(.white)
-                        
                         Spacer()
-                        
                         Image(systemName: selectedTaskCompleted ? "checkmark.circle.fill" : "circle")
                             .foregroundColor(selectedTaskCompleted ? .green : .white)
                     }
@@ -83,7 +79,7 @@ struct NewTaskModalView: View {
             }
             
             // Task Description
-            TextEditor(text: $taskDescription)
+            TextEditor(text: $descriptionText)
                 .scrollContentBackground(.hidden)
                 .padding()
                 .background(Color.white.opacity(0.2))
@@ -96,55 +92,53 @@ struct NewTaskModalView: View {
             
             // Save and Close Buttons
             HStack {
-                Button(action: {
-                    let newTask = Task(
+                Button("Save Task") {
+                    let newTask = ProjectTask(
                         title: taskTitle,
                         type: selectedTaskType,
-                        descriptionText: taskDescription,
+                        descriptionText: descriptionText,
                         isCompleted: selectedTaskCompleted,
                         expectedValue: selectedTaskType == "Numerical" ? selectedNumber : nil,
                         currentValue: 0
                     )
-                    
                     tasks.append(newTask)
-                    selectedTaskCompleted = false
-                    taskTitle = ""
-                    taskDescription = ""
-                    isModalPresented = false
-                }) {
-                    Text("Save Task")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(15)
+                    resetForm()
                 }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(15)
                 
-                Button(action: {
-                    self.isModalPresented = false
-                }) {
-                    Text("Cancel")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(15)
+                Button("Cancel") {
+                    isModalPresented = false
                 }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.red)
+                .foregroundColor(.white)
+                .cornerRadius(15)
                 .padding(.horizontal)
             }
             .padding(.bottom)
         }
-        .frame(maxWidth: 400)
-        .frame(maxHeight: 600)
+        .frame(maxWidth: 400, maxHeight: 600)
         .background(Color.black.opacity(0.8))
         .cornerRadius(20)
         .shadow(radius: 20)
         .padding()
     }
+    private func resetForm() {
+            selectedTaskCompleted = false
+            taskTitle = ""
+            descriptionText = ""
+            selectedNumber = 0
+            isModalPresented = false
+        }
 }
 
 struct NewTaskModalView_Previews: PreviewProvider {
-    @State static var tasksPreview: [Task] = []
+    @State static var tasksPreview: [ProjectTask] = []
     @State static var modalPresented: Bool = true
 
     static var previews: some View {

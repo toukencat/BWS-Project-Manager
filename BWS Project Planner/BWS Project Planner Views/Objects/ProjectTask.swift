@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Task: Identifiable {
+class ProjectTask: Identifiable {
     @Attribute(.unique) var id: UUID = UUID()
     var title: String
     var type: String
@@ -19,7 +19,7 @@ class Task: Identifiable {
     var currentValue: Int?
     @Relationship(inverse: \Project.tasks) var project: Project?
     
-    init(title: String, type: String = "Completion", descriptionText: String = "", isCompleted: Bool, expectedValue: Int? = nil, currentValue: Int?, project: Project? = nil) {
+    init(title: String, type: String = "Completion", descriptionText: String = "", isCompleted: Bool, expectedValue: Int? = nil, currentValue: Int? = nil, project: Project? = nil) {
         self.title = title
         self.type = type
         self.descriptionText = descriptionText

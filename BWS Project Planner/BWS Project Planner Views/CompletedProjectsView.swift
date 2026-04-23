@@ -192,20 +192,20 @@ struct CompletedProjectsView_Previews: PreviewProvider {
         
         // Add tasks to each project
         project1.tasks = [
-            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project1),
-            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project1)
+            ProjectTask(title: "Task 1", isCompleted: true, currentValue: nil, project: project1),
+            ProjectTask(title: "Task 2", isCompleted: true, currentValue: nil, project: project1)
         ]
         project2.tasks = [
-            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project2),
-            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project2)
+            ProjectTask(title: "Task 1", isCompleted: true, currentValue: nil, project: project2),
+            ProjectTask(title: "Task 2", isCompleted: true, currentValue: nil, project: project2)
         ]
         project3.tasks = [
-            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project3),
-            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project3)
+            ProjectTask(title: "Task 1", isCompleted: true, currentValue: nil, project: project3),
+            ProjectTask(title: "Task 2", isCompleted: true, currentValue: nil, project: project3)
         ]
         project4.tasks = [
-            Task(title: "Task 1", isCompleted: true, currentValue: nil, project: project4),
-            Task(title: "Task 2", isCompleted: true, currentValue: nil, project: project4)
+            ProjectTask(title: "Task 1", isCompleted: true, currentValue: nil, project: project4),
+            ProjectTask(title: "Task 2", isCompleted: true, currentValue: nil, project: project4)
         ]
         
         let mockProjects = [project1, project2, project3, project4]

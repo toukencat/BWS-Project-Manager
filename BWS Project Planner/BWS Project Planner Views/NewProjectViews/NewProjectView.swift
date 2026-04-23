@@ -22,7 +22,7 @@ struct NewProjectView: View {
     @State private var isNewTaskModalPresented: Bool = false
     @State private var isTaskViewPresented = false
     @State private var showExitConfirmation = false
-    @State private var tasks: [Task] = []
+    @State private var tasks: [ProjectTask] = []
 
     // Date Selection
     @State private var selectedMonthIndex: Int = Calendar.current.component(.month, from: Date()) - 1
@@ -240,7 +240,7 @@ struct NewProjectView: View {
                             .cornerRadius(15)
                     }
                     .sheet(isPresented: $isTaskViewPresented) {
-                        TaskView(tasks: $tasks)
+                        ProjectTaskView(tasks: $tasks)
                     }
                     
                     Button(action: saveProject) {

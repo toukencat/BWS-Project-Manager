@@ -36,7 +36,7 @@ struct HomeView: View {
                                             
                         MenuButton(title: "Completed Projects", destination: CompletedProjectsView(projects: projectList))
                                                 
-                        MenuButton(title: "Messaging", destination: EmptyView())
+                        MenuButton(title: "Messaging", destination: ChatBotView())
                     }
                     .padding(.horizontal, 40)
                     .frame(maxHeight: .infinity)

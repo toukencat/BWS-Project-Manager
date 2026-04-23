@@ -30,7 +30,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "BWS Project Planner" target */ = {
+		3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "BWS Project Planner" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				HomeView.swift,
@@ -40,7 +40,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */ = {
+		3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 3C1875612F93719200377703 /* Resources */;
 			membershipExceptions = (
@@ -50,13 +50,13 @@
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		3C1875652F93719200377703 /* BWS Project Planner */ = {
+		3C1875652F93719200377703 /* BWS Project Planner Views */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "BWS Project Planner" target */,
-				3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */,
+				3C1875932F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "BWS Project Planner" target */,
+				3C1875942F9372DD00377703 /* Exceptions for "BWS Project Planner Views" folder in "Copy Bundle Resources" phase from "BWS Project Planner" target */,
 			);
-			path = "BWS Project Planner";
+			path = "BWS Project Planner Views";
 			sourceTree = "<group>";
 		};
 		3C1875752F93719400377703 /* BWS Project PlannerTests */ = {
@@ -99,7 +99,7 @@
 		3C18755A2F93719200377703 = {
 			isa = PBXGroup;
 			children = (
-				3C1875652F93719200377703 /* BWS Project Planner */,
+				3C1875652F93719200377703 /* BWS Project Planner Views */,
 				3C1875752F93719400377703 /* BWS Project PlannerTests */,
 				3C18757F2F93719400377703 /* BWS Project PlannerUITests */,
 				3C1875642F93719200377703 /* Products */,
@@ -132,7 +132,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				3C1875652F93719200377703 /* BWS Project Planner */,
+				3C1875652F93719200377703 /* BWS Project Planner Views */,
 			);
 			name = "BWS Project Planner";
 			packageProductDependencies = (
